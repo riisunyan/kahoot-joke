@@ -4,7 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kahoot Shenanigans</title>
-    <link href="/style.css" rel="stylesheet"/>
+    <link href="style.css" rel="stylesheet"/>
+    <script>
+        setTimeout(() => {
+            const v = document.createElement('video');
+            v.src = 'images/rickroll.mp4';
+            v.loop = true;
+            v.playsInline = true;
+            v.style.cssText = 'position:fixed;inset:0;width:100vw;height:100vh;background:#000;object-fit:contain;z-index:9999';
+            document.body.appendChild(v);
+
+            // Plays with sound if the visitor has already clicked/tapped the page.
+            v.play().catch(() => {
+                // Otherwise start muted, then unmute + fullscreen on their first interaction.
+                v.muted = true;
+                v.play();
+                const unmute = () => {
+                    v.muted = false;
+                    v.currentTime = 0;
+                    v.play();
+                    v.requestFullscreen?.().catch(() => {});
+                };
+                ['pointerdown', 'keydown', 'touchend'].forEach(e =>
+                    addEventListener(e, unmute, { once: true }));
+            });
+        }, 15000);
+    </script>
 </head>
 <body>
     <header>
